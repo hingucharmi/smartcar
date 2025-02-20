@@ -89,7 +89,14 @@
     
                 <div class="mb-3">
                     <label for="customers_avatar" class="form-label">Avatar</label>
-                    <input type="text" class="form-control" id="customers_avatar" name="customers_avatar" value="{{ customers.customers_avatar }}" required>
+                    <input type="file" class="form-control" id="customers_avatar" name="customers_avatar" value="{{ customers.customers_avatar }}" required>
+                    <label id="file-name-label">
+                        {% if customers.customers_avatar %}
+                            Current file: {{ customers.customers_avatar.name }}
+                        {% else %}
+                            No file chosen
+                        {% endif %}
+                    </label>
                 </div>
                 
     

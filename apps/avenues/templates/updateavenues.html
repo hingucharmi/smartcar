@@ -27,7 +27,8 @@
 
 {% block content %}
 
-
+<div class='card'>
+    <div class='card-body'>
 
 <div class="col-12">
 
@@ -75,7 +76,14 @@
             <!-- Logo -->
             <div class="mb-3">
                 <label for="avenues_logo" class="form-label">Logo</label>
-                <input type="text" class="form-control" id="avenues_logo" name="avenues_logo" value="{{avenues.avenues_logo}}" required>
+                <input type="file" class="form-control" id="avenues_logo" name="avenues_logo" value="{{avenues.avenues_logo}}" required>
+                <label id="file-name-label">
+                    {% if avenues.avenues_logo %}
+                        Current file: {{ avenues.avenues_logo }}
+                    {% else %}
+                        No file chosen
+                    {% endif %}
+                </label>
             </div>
 
             <!-- Country -->
@@ -108,6 +116,8 @@
             
         </form>
     </div>
+</div>
+</div>
 </div>
 
 {% endblock %}

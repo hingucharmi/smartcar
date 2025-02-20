@@ -67,7 +67,14 @@
           <td>{{ avenues.avenues_email }}</td>
           <td>{{ avenues.avenues_address }}</td>
           <td>{{ avenues.avenues_slot_price }}</td>
-          <td>{{ avenues.avenues_logo }}</td>
+          <td>
+            <a href="{{avenues.avenues_logo.url|cut:'avenues/'}}" target="_blank" >
+              <img src = "{{ avenues.avenues_logo.url }}" alt="Round Image" class="rounded-circle" width="50" height="50">
+              </a>
+          
+          </td>
+
+
           <td>{{ avenues.avenues_country }}</td>
           <td>{{ avenues.avenues_state }}</td>
           <td>{{ avenues.avenues_city }}</td>
@@ -170,7 +177,7 @@
                     <!-- Logo -->
                     <div class="mb-3">
                         <label for="avenues_logo" class="form-label">Logo</label>
-                        <input type="text" class="form-control" id="avenues_logo" name="avenues_logo" required>
+                        <input type="file" class="form-control" id="avenues_logo" name="avenues_logo" required>
                     </div>
         
                     <!-- Country -->

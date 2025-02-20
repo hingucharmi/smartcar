@@ -12,7 +12,7 @@ class Customers(models.Model):
     customers_email = models.EmailField(max_length=25,null=False)
     customers_password = models.CharField(max_length=40, default='',null=False)
     customers_phone = models.CharField(max_length=40, null=False,blank=False, unique=True)
-    customers_avatar = models.CharField(max_length=40, default='',null=False)
+    customers_avatar = models.ImageField(upload_to='customers/',null=True,blank=True)
     
     
     def _str__(self):

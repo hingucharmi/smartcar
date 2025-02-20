@@ -4,6 +4,7 @@ from .register.views import RegisterView
 from .login.views import LoginView
 from .forgot_password.views import ForgetPasswordView
 from .reset_password.views import ResetPasswordView
+from .private_policy.views import PrivatePolicyView
 from .verify_email.views import  VerifyEmailTokenView , VerifyEmailView, SendVerificationView
 
 
@@ -54,6 +55,12 @@ urlpatterns = [
         "reset_password/<str:token>/",
         ResetPasswordView.as_view(template_name="auth/reset_password.html"),
         name="reset-password",
+    ),
+
+    path(
+        "privatepolicy",
+        PrivatePolicyView.as_view(template_name="auth/privatepolicy.html"),
+        name="privatepolicy",
     ),
 
 ]

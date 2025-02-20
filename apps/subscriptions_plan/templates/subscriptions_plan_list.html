@@ -30,7 +30,7 @@
 {{ block.super }}
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<script src="{% static 'js/subscriptions_add.js' %}"></script>
+<script src="{% static 'js/subscriptions_add1.js' %}"></script>
 <script src="{% static 'js/transactions-delete.js' %}"></script>
 
 {% endblock page_js %}
@@ -105,6 +105,10 @@
     </table>
   </div>
 </div>
+<script>
+  var addTransactionBtn = '{% if perms.floors.add_floors %}' + true + '{% endif %}';
+  
+  </script>
       
   <!-- Add New Address Modal -->
   <div class="modal fade" id="addNewAddress" tabindex="-1" aria-hidden="true">
@@ -187,96 +191,4 @@
       </div>
     </div>
   </div>
-
-  <!--/ Add New Address Modal -->
-  
-<!---------------------------UPDATE Form---------------------------------------------------->
-  
-  <!-- Add New Address Modal Update -->
-  {% comment %} <div class="modal fade" id="updateNewSubscriptionsPlan" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-simple modal-update-new-address">
-      <div class="modal-content">
-        <div class="modal-body ">
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-          <div class="text-center mb-6">
-            <h4 class="address-title mb-2">Update New Record</h4>
-           
-          </div>
-          {% for plan in subscriptions_plan %}
-          <form class="update-transaction pt-0" id="updateNewSubscriptionsPlan" action="{% url 'update_subscriptionsplan' plan.subscriptions_plan_id %}" method="POST" enctype="multipart/form-data">
-                
-            {% csrf_token %}  
-
-            <input type="hidden" name="subscriptions_plan_id" id="subscriptions_plan_id">
-
-             <!--Subscriptionplan name -->
-             <div class="row g-6">
-             <div class="mb-3">
-              <label for="subscriptionsplan_name" class="form-label">Subscriptions Plan name</label>
-              <input type="text" class="form-control dt-subscriptionsplan-name" placeholder="Name" id="subscriptions_plan_name" value="{{ plan.subscriptions_plan_name }}" name="subscriptions_plan_name" required>
-             
-          </div>
-            <!-- Description -->
-            <div class="mb-3">
-                <label for="subscriptionsplan_description" class="form-label"> Subscriptionplan Description</label>
-                <input type="text" class="form-control dt-subscriptionsplan_description" id="description" name="description" value="{{ plan.descritpion }}"placeholder="Description" required>
-            </div>
-            
-            <!-- Price -->
-            <div class="mb-3">
-                <label for="price" class="form-label">Price</label>
-                <input type="number" class="form-control dt-price" id="price" name="price"  value="{{ plan.price }}" placeholder="Price" required>
-            </div>
-  
-            <!-- Validity -->
-            <div class="mb-3">
-                <label for="validity" class="form-label">Validity</label>
-                <input type="number" class="form-control dt-validity" id="validity" name="validity" value="{{ plan.validity }}" placeholder="Validity" required>
-            </div>
-
-            <!-- due- date -->
-            <div class="mb-3">
-              <label for="validity" class="form-label">Due Date</label>
-              <input type="date" class="form-control dt-due-date" id="due_date"  value="{{ subscriptions_plan_id.due_date|date:'c' }}" name="due_date" placeholder="Due Date" required>
-          </div>
-
-            <!--Status-->
-            <div class="mb-3">
-              <label for="floors_status" class="form-label">Status</label>
-              <select id="customer-status" class="select2 form-select" name="status">
-                <option value="Paid" {% if subscriptions_plan_id.status == 'Paid' %} selected {% endif %}>Paid</option>
-                <option value="Due" {% if subscriptions_plan_id.status == 'Due' %} selected {% endif %}>Due</option>
-                <option value="Canceled" {% if subscriptions_plan_id.status == 'Canceled' %} selected {% endif %}>Canceled</option>
-              </select>
-            </div>
-
-            
-          </div>
-  
-            <!-- Submit Button -->
-            <div class="col-12 text-center">
-              <button type="submit" class="btn btn-primary me-3">Submit</button>
-              <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
-            </div>
-            
-        </form>
-        {% endfor%}
-    </div>
-            </div>
-          </form>
-        </div>
-      </div>
-    </div>
-  {% endcomment %}
-  <!--/ Add New Address Modal -->
-  
-  <!--/ Add New Address Modal -->
-  
-  
-
-  <script>
-    var addTransactionBtn = '{% if perms.floors.add_floors %}' + true + '{% endif %}';
-    
-    </script>
-
 {% endblock %}

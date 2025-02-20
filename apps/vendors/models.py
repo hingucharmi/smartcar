@@ -11,7 +11,7 @@ class VendorVO(models.Model):
     vendors_password = models.CharField(max_length=100,null=False)
     vendors_phone = models.CharField(blank=False, max_length=30,null=False)
     vendors_address = models.TextField(max_length=100,null=False)
-    vendors_logo = models.CharField(max_length=100,null=False)
+    vendors_logo = models.ImageField(null=True,blank=True , upload_to="vendors/")
     vendors_avenues = models.ForeignKey("avenues.AvenuesVO", on_delete=models.CASCADE,default=1)
 
         

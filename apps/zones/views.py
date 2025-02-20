@@ -10,7 +10,7 @@ from django.views import View
 from apps.zones.models import ZonesVO
 from apps.floors.models import FloorsVO
 
-class ZonesAddView(View):
+class ZonesAddView(TemplateView):
     permission_required = ("zones.add_zones")
 
     def get_context_data(self, **kwargs):

@@ -76,9 +76,14 @@
               <td>{{ customers.customers_username }}</td>
               <td>{{ customers.customers_email }}</td>
               <td>{{ customers.customers_phone }}</td>
-              <td>{{ customers.customers_avatar }}</td>
-              
+
               <td>
+                <a href="{{ customers.customers_avatar.url|cut:'customers/' }}" target="_blank">
+                   <img src="{{ customers.customers_avatar.url }}"  alt="Round Image" class="rounded-circle" width="50" height="50"></td>
+                </a>
+              <td>
+
+
                 {% if perms.customers.delete_customers %}
 
                 <a href="{% url 'customers_delete' customers.customers_id %}"  class="btn me-sm-3 me-1 delete-transaction" data-transaction-username="{{ customers.customers_username }}">
@@ -162,7 +167,7 @@
 
             <div class="mb-3">
                 <label for="customers_avatar" class="form-label">Avatar</label>
-                <input type="text" class="form-control" id="customers_avatar" name="customers_avatar" placeholder="Avatar" required>
+                <input type="file" class="form-control" id="customers_avatar" name="customers_avatar" placeholder="Avatar" required>
             </div>
             
 

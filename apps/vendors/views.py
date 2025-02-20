@@ -32,11 +32,12 @@ class VendorsAddView(TemplateView):
             vendors_password = request.POST.get("vendors_password"),
             vendors_phone = request.POST.get("vendors_phone"),
             vendors_address = request.POST.get("vendors_address"),
-            vendors_logo = request.POST.get("vendors_logo"),
+            vendors_logo = request.FILES.get("vendors_logo"),
             vendors_avenues = avenues,
 
 
         )
+        print(vendors.vendors_logo.name,"=====logo")
         vendors.save()
         messages.success(request,'Vendor Added...!')
         return redirect("vendors")  # Redirect to list view after saving
@@ -91,7 +92,7 @@ class VendorsUpdateView(UpdateView):
         return context
     def post(self, request, pk):
         vendors = self.get_vendors(pk)
-        form = VendorsForm(request.POST, instance=vendors)
+        form = VendorsForm(request.POST,request.FILES, instance=vendors)
 
         print("Received POST data:", request.POST)
         

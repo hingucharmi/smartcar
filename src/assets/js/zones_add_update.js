@@ -420,11 +420,12 @@ $(function () {
         },
         {
           text: '<i class="ti ti-plus me-sm-1"></i> <span class="d-none d-sm-inline-block" data-bs-toggle="modal" data-bs-target="#addNewZones">Add New Records</span>',
-          className: 'add-new btn btn-primary ms-2 ms-sm-0 waves-effect waves-light' + (addTransactionBtn ? '' : ' disabled'),
-           action: function (e, dt, button, config) {
-            window.location.href = '/zones/add';
+          className: 'add-new btn btn-primary ms-2 ms-sm-0 waves-effect waves-light'
+          //  + (addTransactionBtn ? '' : ' disabled'),
+          //  action: function (e, dt, button, config) {
+          //   window.location.href = '/zones/add';
              
-            }
+          //   }
   
         }
       ],

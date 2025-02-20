@@ -7,7 +7,7 @@ from django.views import View
 from apps.subscriptions_plan.models import SubscriptionsPlanVO
 from django.contrib import messages
 
-class SubscriptionsPlanAddView(View):
+class SubscriptionsPlanAddView(TemplateView):
     permission_required = ("subscriptions_plan.add_subscriptions_plan")
 
     

@@ -57,7 +57,7 @@ class CustomersAddView(View):
             customers_email =request.POST.get("customers_email"),
             customers_password = request.POST.get("customers_password"),
             customers_phone = request.POST.get("customers_phone"),
-            customers_avatar = request.POST.get("customers_avatar"),
+            customers_avatar = request.FILES.get("customers_avatar"),
         )
         customers_obj.save()
         return redirect("customers")  

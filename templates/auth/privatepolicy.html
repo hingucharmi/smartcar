@@ -3,7 +3,7 @@
 {% load static %}
 {% load i18n %}
 
-{% block title %}Register - Pages{% endblock %}
+{% block title %}Terms and Conditions - Pages{% endblock %}
 
 {% block vendor_css %}
 {{ block.super }}
@@ -50,53 +50,47 @@
     <!-- Register -->
     <div class="d-flex col-12 col-lg-4 align-items-center authentication-bg p-sm-12 p-6">
       <div class="w-px-400 mx-auto mt-12 pt-5">
-        <h4 class="mb-1">Adventure starts here 🚀</h4>
-        <p class="mb-6">Make your app management easy and fun!</p>
-        {% if messages %}
-        {% for message in messages %}
-        <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-warning{% endif %}" role="alert">
-          {{ message }}
-        </div>
-        {% endfor %}
-        {% endif %}
+        <h4 class="mb-1">Private Policy and Terms 🚀</h4>
+        <p class="mb-6">Term And Condition </p>
+        
 
-        <form id="formAuthentication" class="mb-6" action="{% url 'register' %}" method="post">
+        {% comment %} <form id="formAuthentication" class="mb-6" action="{% url 'register' %}" method="post"> {% endcomment %}
           {% csrf_token %}
           <div class="mb-6">
-            <label for="username" class="form-label">Username</label>
-            <input type="text" class="form-control" id="username" name="username" placeholder="Enter your username" autofocus>
+            <label  class="form-label"> Step 1:</label>
+            <p>Data Privacy Laws. First, take the time to verify what data privacy legislation applies to your business and familiarize yourself with all guidelines and legal obligations that affect your privacy policy and practices    
+            </p></div>
+          <div class="mb-6">
+            <label  class="form-label">Step 2:</label>
+            <p>Step 2: Privacy audit. Then perform a thorough privacy audit on your platform to determine and record every piece of personal information you collect from users, including through internet cookies or other trackers</p>
+            
           </div>
           <div class="mb-6">
-            <label for="email" class="form-label">Email</label>
-            <input type="text" class="form-control" id="email" name="email" placeholder="Enter your email">
-          </div>
-          <div class="mb-6 form-password-toggle">
-            <label class="form-label" for="password">Password</label>
+            <label class="form-label" for="password">Step 3:</label>
             <div class="input-group input-group-merge">
-              <input type="password" id="password" class="form-control" name="password" placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;" aria-describedby="password" />
-              <span class="input-group-text cursor-pointer"><i class="ti ti-eye-off"></i></span>
+                <p>Step 3: Categories of personal information. Next, determine which categories of personal data you collect under the data privacy regulations your business must follow; this may include sensitive personal information which is subject to stricter guidelines under laws like the amended CCPA and the CDPA</p>
             </div>
           </div>
 
-          <div class="mb-6 mt-8">
-            <div class="form-check mb-8 ms-2">
-              <input class="form-check-input" type="checkbox" id="terms-conditions" name="terms">
-              <label class="form-check-label" for="terms-conditions">
-                I agree to
-                <a href="{%url 'privatepolicy'%}">privacy policy & terms</a>
-              </label>
+          <div class="mb-6">
+            
+            <label class="form-label" for="password">Step 4:</label>
+            <div class="input-group input-group-merge">
+                <p> Why you collect personal data. You now need to determine and record your legal basis for why you collect each piece of personal data, which may be subject to legal guidelines if you fall under regulations like the GDPR</p>
             </div>
           </div>
-          <button id="btnSubmit" class="btn btn-primary w-100" type="submit">
+          {% comment %} <button id="btnSubmit" class="btn btn-primary w-100" type="submit">
             <span id="btnText" class="me-1">Sign up</span>
             <span id="btnLoader" class="spinner-border spinner-border-sm visually-hidden" role="status" aria-hidden="true"></span>
-          </button>
-        </form>
+          </button> {% endcomment %}
+        {% comment %} </form> {% endcomment %}
 
         <p class="text-center">
           <span>Already have an account?</span>
           <a href="{% url 'login' %}">
-            <span>Sign in instead</span>
+            <span>Sign in instead</span><br>
+            <a href="{% url 'login' %}">
+                <span>Back</span>
           </a>
         </p>
       </div>

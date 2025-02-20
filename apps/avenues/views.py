@@ -30,7 +30,7 @@ class AvenuesAddView(TemplateView):
             avenues_password=request.POST.get("avenues_password"),
             avenues_address=request.POST.get("avenues_address"),
             avenues_slot_price=request.POST.get("avenues_slot_price"),
-            avenues_logo=request.POST.get("avenues_logo"),
+            avenues_logo=request.FILES.get("avenues_logo"),
             avenues_country=request.POST.get("avenues_country"),
             avenues_state=request.POST.get("avenues_state"),
             avenues_city=request.POST.get("avenues_city"),
