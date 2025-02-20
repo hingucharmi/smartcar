@@ -1,0 +1,97 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Floors{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/apex-charts/apex-charts.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/apex-charts/apexcharts.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/home.js' %}"></script>
+
+{% comment %} <script src="{% static 'js/app-academy-dashboard.js' %}"></script> {% endcomment %}
+{% endblock page_js %}
+
+{% block content %}
+
+<div class="card">
+  <div class="card-body">
+    <h1>Floors From</h1>
+<div class="container mt-5">
+        
+    <form action="{% url 'update_floors' floors.floors_id %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <input type="hidden" name="floors_name" id="floors_id">
+
+
+         <!--Avenue id -->
+         <div class="row g-6">
+         <div class="mb-3">
+          <label for="floors_avenues_id" class="form-label">Avenue name</label>
+          <select name="floors_avenues_id" class="form-control dt-avenues-name" id="floors_avenues_id" required>
+                  {% comment %} {% for avenues in avenues_dict %} {% endcomment %}
+                  
+                  {% for avenue in avenues %}
+                  <option value="{{ avenue.avenues_id }}" {% if avenue.avenues_id == floors.floors_avenues_id.avenues_id %}
+                          selected
+                          {% endif %}> 
+                          {{ avenue.avenues_name }}
+                  </option>
+                  {% endfor %}
+
+                  {% comment %} {% endfor %} {% endcomment %}
+            </select>
+      </div>
+        <!-- Name -->
+        <div class="mb-3">
+            <label for="floors_name" class="form-label"> Floor Name</label>
+            <input type="text" class="form-control dt-floors-name" id="floors_name" value="{{ floors.floors_name }}" name="floors_name" required>
+        </div>
+        
+        <!-- plane -->
+        <div class="mb-3">
+            <label for="floors_plan" class="form-label">Floor Plan</label>
+            <input type="text" class="form-control dt-floors-plan" id="floors_plan" value="{{ floors.floors_plan }}" name="floors_plan" required>
+        </div>
+
+        <!-- Slot Price -->
+        <div class="mb-3">
+            <label for="floors_slot_price" class="form-label">Slot Price</label>
+            <input type="text" class="form-control dt-floors-solt-price" id="floors_slot_price" value="{{ floors.floors_slot_price }}" name="floors_slot_price" required>
+        </div>
+        
+      </div>
+
+        <!-- Submit Button -->
+        {% comment %} <div class="col-12 text-center"> {% endcomment %}
+          <button type="submit" class="btn btn-primary me-3">Submit</button>
+          <a href="{% url 'floors' %}" class="btn btn-secondary">Back</a>
+       
+        
+    </form>
+</div>
+        </div>
+      </form>
+    </div>
+  </div>
+    </div>
+  </div>
+</div>
+</div>
+{% endblock %}

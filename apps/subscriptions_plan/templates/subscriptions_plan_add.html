@@ -1,0 +1,83 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Transactions{% endblock title %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/select2/select2.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/form-validation.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/select2/select2.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/popular.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/auto-focus.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/transactions-add-update.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+<!-- Add Transactions Form -->
+<div class="card">
+  <div class="card-body">
+    <form class="add-transactions pt-0" id="addTransactionForm" action="{% url 'add_subscriptionsplan' %}" method="post">
+      {% csrf_token %}
+      <div class="mb-4">
+      <!--Subscriptionplan name -->
+      <div class="row g-6">
+        <div class="mb-3">
+         <label for="subscriptionplan_name" class="form-label">Subscriptions Plan name</label>
+         <input type="text" class="form-control dt-subscriptionplan-name" placeholder="Name" id="subscriptionplan_name" name="subscriptionplan_name" required>
+        
+     </div>
+       <!-- Description -->
+       <div class="mb-3">
+           <label for="subscriptionplan_description" class="form-label"> Subscriptionplan Description</label>
+           <input type="text" class="form-control dt-subscriptionplan_description" id="subscriptionplan_description" name="subscriptionplan_description" placeholder="Description" required>
+       </div>
+       
+       <!-- Price -->
+       <div class="mb-3">
+           <label for="price" class="form-label">Price</label>
+           <input type="number" class="form-control dt-price" id="price" name="price" placeholder="Price" required>
+       </div>
+
+       <!-- Validity -->
+       <div class="mb-3">
+           <label for="validity" class="form-label">Validity</label>
+           <input type="number" class="form-control dt-validity" id="validity" name="validity" placeholder="Validity" required>
+       </div>
+
+       <!--Status-->
+       <div class="mb-3">
+         <label for="floors_status" class="form-label">Status</label>
+         <select id="status" class="select2 form-select" name="status" placeholder="Select Status">
+           <option value="" disabled selected class="d-none"></option>
+           <option value="Paid">Paid</option>
+           <option value="Due">Due</option>
+           <option value="Canceled">Canceled</option>
+         </select>
+       </div>
+
+       
+     </div>
+
+       <!-- Submit Button -->
+       <div class="col-12 text-center">
+      <button type="submit" class="btn btn-primary me-sm-3 me-1" name="submitButton">Submit</button>
+      <a href="{% url 'subscriptionsplan' %}" class="btn btn-secondary">Back</a></div>
+    </form>
+  </div>
+</div>
+<!--/ Add Transactions Form -->
+{% endblock %}

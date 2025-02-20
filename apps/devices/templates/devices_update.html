@@ -1,0 +1,130 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Floors{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/form-validation.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/popular.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/auto-focus.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/devices.js' %}"></script>
+<script src="{% static 'js/transactions-delete.js' %}"></script>
+
+{% endblock page_js %}
+
+{% block content %}
+
+<div class='card'>
+    <div class='card-body'>
+<div class="col-12">
+  
+              
+    <div class="container mt-5">
+      
+      <h2 class="mb-4">Devices Form</h2>
+      <form action="{% url 'devices_update' devices.devices_id%}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <input type="hidden" name="devices_id" id="devices_id" value={{devices.devices_id}}>
+              
+                 <!--Avenue id -->
+                 <div class="row g-6">
+                 <div class="mb-3">
+                  <label for="devices_name" class="form-label">Devices name</label>
+                  <input type="text" class="form-control dt-devices-name" id="devices_name" name="devices_name" placeholder="Device Name" value={{devices.devices_name}} required>
+    
+                  
+              </div>
+                <!-- Name -->
+                <div class="mb-3">
+                    <label for="devices_mac" class="form-label"> Device MacAddress</label>
+                    <input type="text" class="form-control dt-devices_mac" id="devices_mac" name="devices_mac" placeholder="Mac Address" value={{devices.devices_mac}} required>
+                    
+                    </div>
+                
+                <!-- plane -->
+                <div class="mb-3">
+                    <label for="devices_type" class="form-label">Type</label>
+                    <input type="number" class="form-control dt-devices_type" id="devices_type" name="devices_type" placeholder="Type" value={{devices.devices_type}} required>
+                </div>
+                
+                <div class="mb-3">
+                  <label for="devices_image" class="form-label">Image</label>
+                  <input type="text" class="form-control dt-devices_image" id="devices_image" name="devices_image" placeholder="Image" value={{devices.devices_image}} required>
+                </div>
+    
+                
+                <div class="mb-3">
+                    <label for="devices_avenues" class="form-label">Avenues Name</label>
+                    <select name="devices_avenues" class="form-control dt-devices_avenues" id="devices_avenues"  required>
+                        {% for avenues in avenues_dict %}
+        
+                        <option value="{{avenues.avenues_id}}" {% if devices.devices_avenues.avenues_id == avenues.avenues_id %} selected {% endif %}>
+                            {{avenues.avenues_name}}
+                            </option>
+                        {%endfor%}
+                        </select>
+                </div>
+      
+    
+                <div class="mb-3">
+                    <label for="devices_vendors" class="form-label">Vendors Name</label>
+                    <select name="devices_vendors" class="form-control dt-devices_vendors" id="devices_vendors" required>
+                        {% for vendors in vendors_dict %}
+                        
+                        <option value="{{ vendors.vendors_id }}" {% if devices.devices_vendors.vendors_id == vendors.vendors_id %} selected {% endif %}>
+                            {{ vendors.vendors_username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+    
+      
+                <!-- Slot Price -->
+                <div class="mb-3">
+                    <label for="devices_state" class="form-label">State</label>
+                    <input type="number" class="form-control dt-devices_state" id="devices_state" name="devices_state" placeholder="State" value={{devices.devices_state}} required>
+                </div>
+    
+                <div class="mb-3">
+                    <label for="devices_status" class="form-label">Status</label>
+                    <input type="number" class="form-control dt-devices_status" id="devices_status" name="devices_status" placeholder="Status" value={{devices.devices_status}} required>
+                </div>
+                
+    
+    
+                <!-- Submit Button -->
+                <div class="col-12 text-left">
+                  <button type="submit" class="btn btn-primary me-3">Submit</button>
+                  <a href="{% url 'devices' %}" class="btn btn-secondary">Cancel</a>
+                </div>
+                
+            </form>
+        </div>
+    </div>
+      
+</div>
+</div>
+
+
+{% endblock %}

@@ -1,0 +1,89 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Floors{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/apex-charts/apex-charts.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/apex-charts/apexcharts.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/zones_add_update.js' %}"></script>
+
+{% comment %} <script src="{% static 'js/app-academy-dashboard.js' %}"></script> {% endcomment %}
+{% endblock page_js %}
+
+{% block content %}
+
+
+{% comment %} <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}  <!-- This will render the form fields -->
+    <button type="submit">Update</button>
+    <a href="{% url 'floors' %}">Cancel</a>
+</form> {% endcomment %}
+<div class="card">
+    <div class="card-body">
+        <h1>Update Zones</h1>
+    <form action="{% url 'zones_update' zones.zones_id %}" method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+      
+         <!--Floors id -->
+         <div class="row g-6">
+             <input type="hidden" name="zones_id" value="{{ zones.zones_id }}" id=" zones_id">
+         <div class="mb-3">
+            <label for="floors_id" class="form-label">FLoors name</label>
+            <select name="zones_floors_id" class="form-control dt-floors_name" id="floors_id" required>
+                {% for floor in floors %}
+                <option value="{{ floor.floors_id }}" {% if zones.zones_floors_id_id == floor.floors_id %} selected {% endif %}>
+                    {{ floor.floors_name }}
+                </option>
+                {% endfor %}
+            </select>
+            
+      </div>
+        <!-- Name -->
+        <div class="mb-3">
+            <label for="zones_name" class="form-label"> Zones Name</label>
+            <input type="text" class="form-control dt-zones_name" id="zones_name" value="{{ zones.zones_name }}" name="zones_name" required>
+        </div>
+        
+        <!-- plane -->
+        <div class="mb-3">
+            <label for="zones_capacity" class="form-label">Capacity</label>
+            <input type="number" class="form-control dt-zones_capacity" id="zones_capacity" value="{{ zones.zones_capacity }}" name="zones_capacity" required>
+        </div>
+
+        <!-- Slot Price -->
+        <div class="mb-3">
+            <label for="zones_slot_price" class="form-label">Slot Price</label>
+            <input type="number" class="form-control dt-zones_slot_price" id="zones_slot_price" value="{{ zones.zones_slot_price }}" name="zones_slot_price" required>
+        </div>
+        
+      </div>
+
+        <!-- Submit Button -->
+        <div class="col-12 text-left">
+          <button type="submit" class="btn btn-primary me-3">Submit</button>
+          <a href="{% url 'zones' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+        
+    </form>
+</div>
+</div>
+
+{% endblock %}

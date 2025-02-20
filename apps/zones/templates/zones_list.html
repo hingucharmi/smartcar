@@ -1,0 +1,169 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Floors{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/form-validation.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/popular.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/auto-focus.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="{% static 'js/zones_add_update.js' %}"></script>
+<script src="{% static 'js/transactions-delete.js' %}"></script>
+
+{% endblock page_js %}
+
+{% block content %}
+<!-- DataTable with Buttons -->
+<div class="card">
+  {% if messages %}
+<div id="message" class="container">
+{% for message in messages %}
+<div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-warning{% endif %}" role="alert">
+  {{ message }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+</div>
+{% endif %}
+  <div class="card-datatable table-responsive pt-0">
+    <table class="datatables-basic table">
+      <thead>
+        <tr>
+           
+            <th>Floors Name</th>
+            <th>Zones Name</th>
+            <th>Capacity</th>
+            <th>Capacity</th>
+            <th>Slot Price</th>
+            <th>Actions</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for zones in zones_dict %}
+        <tr>
+            <td>{{ zones.zones_floors_id.floors_name }}</td>
+            <td>{{ zones.zones_name }}</td>
+            <td>{{ zones.zones_capacity }}</td>
+            <td>{{ zones.zones_slot_price }}</td>
+            
+            
+             <td>
+            {% if perms.zones.delete_zones %}
+              
+              <a href="{% url 'zones_delete' zones.zones_id %}" class="btn me-sm-3 me-1 delete-transaction" data-transaction-username="{{ zones.zones_name }}">
+                <i class="ti ti-trash ti-md"></i></a>
+              {% endif %}
+                            
+              {% if perms.zones.change_zones %}
+            
+           <a href="{% url 'zones_update' zones.zones_id %}" class="btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill"><i class='ti ti-edit ti-md'></i></a>
+           {% endif %}
+          </td>
+          {% empty %}
+          <tr>
+            <td colspan="5" style="text-align: center;">No data available</td>
+          </tr>
+          {% endfor %}
+
+    </tbody>
+    </table>
+  </div>
+</div>
+
+
+ <!-- Add New AddZones Modal -->
+ <div class="modal fade" id="addNewZones" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-simple modal-add-new-address">
+      <div class="modal-content">
+        <div class="modal-body ">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="text-center mb-6">
+            <h4 class="address-title mb-2">Add New Zones</h4>
+           
+          </div>
+        
+        <div class="col-12">
+  
+              
+        <div class="container mt-5">
+        
+        <h2 class="mb-4">Zones Form</h2>
+        <form action="/zones/add" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+
+             <!--Floor id -->
+             <div class="row g-6">
+             <div class="mb-3">
+              <label for="floors_id" class="form-label">Floors name</label>
+              <select name="floors_id" class="form-control dt-floors_name" id="floors_id" required>
+                      <option value="" disabled selected>Select a Floors Name</option>
+                      {% for floors in floors_dict %}
+                      
+                      <option value="{{ floors.floors_id }}">{{ floors.floors_name }}</option>
+                      {% endfor %}
+                  </select>
+          </div>
+            <!-- Name -->
+            <div class="mb-3">
+                <label for="zones_name" class="form-label"> Zones Name</label>
+                <input type="text" class="form-control dt-zones_name" id="zones_name" name="zones_name" required>
+            </div>
+            
+            <!-- Capacity -->
+            <div class="mb-3">
+                <label for="zones_capacity" class="form-label">Capacity</label>
+                <input type="number" class="form-control dt-zones_capacity" id="zones_capacity" name="zones_capacity" required>
+            </div>
+  
+            <!-- Slot Price -->
+            <div class="mb-3">
+                <label for="zones_slot_price" class="form-label">Slot Price</label>
+                <input type="text" class="form-control dt-zones_slot_price" id="zones_slot_price" name="zones_slot_price" required>
+            </div>
+            
+          </div>
+  
+            <!-- Submit Button -->
+            <div class="col-12 text-center">
+              <button type="submit" class="btn btn-primary me-3">Submit</button>
+              <a href="{% url 'zones' %}" class="btn btn-secondary">Cancel</a></div>
+            
+        </form>
+    </div>
+            </div>
+        
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    var addTransactionBtn = '{% if perms.zones.add_zones %}' + true + '{% endif %}';
+    
+    </script>
+{% endblock%}

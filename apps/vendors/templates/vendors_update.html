@@ -1,0 +1,114 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Floors{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/form-validation.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/popular.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/auto-focus.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/subscription_cust_list.js' %}"></script>
+<script src="{% static 'js/transactions-delete.js' %}"></script>
+
+{% endblock page_js %}
+
+{% block content %}
+
+<div class='card'>
+  <div class='card-body'>
+<div class="col-12">
+  
+              
+    <div class="container mt-5">
+      
+      <h2 class="mb-4">Vendors Form</h2>
+      <form action="{% url 'vendors_update' vendors.vendors_id%}" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+
+          <input type="hidden" name="vendors_id" id="vendors_id" value={{vendors.vendors_id}}>
+           <!--Avenue id -->
+           <div class="row g-6">
+           <div class="mb-3">
+            <label for="vendors_username" class="form-label">Vendors name</label>
+            <input type="text" class="form-control dt-vendors_username" id="vendors_username" name="vendors_username" value="{{vendors.vendors_username}}" required>
+        </div>
+
+        <div class="row g-6">
+          <div class="mb-3">
+           <label for="vendors_avenues" class="form-label">Avenues name</label>
+           <select name="vendors_avenues" class="form-control dt-vendors_avenues" id="vendors_avenues" required>
+             
+            {% for avenues in avenues_dict %}
+            <option value="{{ avenues.avenues_id }}" {% if vendors.vendors_avenues.avenues_id == avenues.avenues_id %} selected {% endif %}>
+                    {{ avenues.avenues_name }}
+            </option>
+            {% endfor %}
+             
+        </select>
+          </div>
+        <!-- Name -->
+          <div class="mb-3">
+              <label for="vendors_email" class="form-label"> Email</label>
+              <input type="email" class="form-control dt-vendors_email" id="vendors_email" name="vendors_email" value="{{vendors.vendors_email}}"required>
+              
+              </div>
+          
+          <!-- plane -->
+          <div class="mb-3">
+              <label for="vendors_password" class="form-label">Password</label>
+              <input type="password" class="form-control dt-vendors_password" id="vendors_password" name="vendors_password" value="{{vendors.vendors_password}}" required>
+          </div>
+
+          <!-- Slot Price -->
+          <div class="mb-3">
+              <label for="vendors_phone" class="form-label">Phone</label>
+              <input type="text" class="form-control dt-vendors_phone" id="vendors_phone" name="vendors_phone" value="{{vendors.vendors_phone}}" required>
+          </div>
+          
+          <div class="mb-3">
+            <label for="vendors_address" class="form-label">Address</label>
+            <textarea class="form-control dt-vendors_address" id="vendors_address" name="vendors_address" required>{{vendors.vendors_address}}</textarea>
+          </div>
+
+        <div class="mb-3">
+          <label for="vendors_logo" class="form-label">Logo</label>
+          <input type="text" class="form-control dt-vendors_logo" id="vendors_logo" name="vendors_logo" value="{{vendors.vendors_logo}}" placeholder="+12125552368" required>
+        </div>
+
+          <!-- Submit Button -->
+          <div class="col-12 text-left">
+            <button type="submit" class="btn btn-primary me-3">Submit</button>
+            <a href="{% url 'vendors' %}" class="btn btn-secondary">Cancel</a>
+          </div>
+          
+      </form>
+  </div>
+          </div>
+        </div>
+      </div>
+      
+  
+
+
+{% endblock %}

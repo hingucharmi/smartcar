@@ -1,0 +1,71 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Floors{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/apex-charts/apex-charts.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/apex-charts/apexcharts.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/app-academy-dashboard.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Floors Form</h2>
+        <form action="/app/floors/add_floors
+        " method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Name -->
+            <div class="mb-3">
+                <label for="floors_name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="floors_name" name="floors_name" required>
+            </div>
+            
+            <!-- plane -->
+            <div class="mb-3">
+                <label for="floors_plan" class="form-label">plan</label>
+                <input type="text" class="form-control" id="floors_plan" name="floors_plan" required>
+            </div>
+
+            <!-- Slot Price -->
+            <div class="mb-3">
+                <label for="floors_slot_price" class="form-label">Slot Price</label>
+                <input type="text" class="form-control" id="floors_slot_price" name="floors_slot_price" required>
+            </div>
+
+            <!--Avenue id -->
+            
+            <div class="mb-3">
+                <label for="avenues_id" class="form-label">Floor Avenue name</label>
+                <select name="avenues_id" class="form-control" id="avenues_id" required>
+                        <option value="" disabled selected>Select a Avenue Name</option>
+                        {% for avenues in avenues_dict %}
+                        
+                        <option value="{{ avenues.avenues_id }}">{{ avenues.avenues_name }}</option>
+                        {% endfor %}
+                    </select>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+    </div>
+{% endblock %}

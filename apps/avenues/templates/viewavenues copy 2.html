@@ -1,0 +1,213 @@
+{% extends layout_path %} {% load static %} {% load i18n %} {% block title %}Avenues App{% endblock %} 
+{% block vendor_css %} {{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/apex-charts/apex-charts.css' %}" />
+
+{% endblock vendor_css %} {% block vendor_js %} {{ block.super }}
+
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/apex-charts/apexcharts.js' %}"></script>
+
+{% endblock vendor_js %} {% block page_js %} {{ block.super }}
+
+<script src="{% static 'js/tables-datatables-basic1.js' %}"></script>
+<script src="{% static 'js/transactions-list.js' %}"></script>
+
+<script src="{% static 'js/app-avenues-delete.js' %}"></script>
+
+
+{% endblock page_js %} {% block content %}
+
+
+
+{% if messages %}
+<div id="message" class="container">
+{% for message in messages %}
+<div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-warning{% endif %}" role="alert">
+  {{ message }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+</div>
+{% endif %}
+
+<div class="card">
+  <div class="card-datatable table-responsive pt-0">
+    <table class="datatables-basic table">
+      <thead>
+        <tr>
+          <th></th>
+          <th></th>
+          <th></th>
+          <th>Username</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Address</th>
+          <th>Slot Price</th>
+          <th>Logo</th>
+          <th>Country</th>
+          <th>State</th>
+          <th>City</th>
+          <th>Pincode</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for avenues in avenues_dict %}
+        <tr>
+          <td></td>
+          <td></td>
+          <td>{{ avenues.avenues_name }}</td>
+          <td>{{ avenues.avenues_username }}</td>
+          <td>{{ avenues.avenues_email }}</td>
+          <td>{{ avenues.avenues_address }}</td>
+          <td>{{ avenues.avenues_slot_price }}</td>
+          <td>{{ avenues.avenues_logo }}</td>
+          <td>{{ avenues.avenues_country }}</td>
+          <td>{{ avenues.avenues_state }}</td>
+          <td>{{ avenues.avenues_city }}</td>
+          <td>{{ avenues.avenues_pincode }}</td>
+
+          <td>
+            {% if perms.avenues.delete_avenues %}
+            <a href="{% url 'avenues_delete' avenues.avenues_id %}" class="btn me-sm-3 me-1 delete-transaction" data-transaction-username="{{ avenues.avenues_name }}">
+              <i class="ti ti-trash ti-md"></i></a>
+            {% endif %}
+
+            {% comment %} {% if avenues.avenues_id %} {% endcomment %}
+            {% if perms.avenues.edit_avenues %}
+            <a
+              href="{% url 'avenues_update' avenues.avenues_id %}"
+              class="btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill"
+              ><i class="ti ti-edit ti-md"></i
+            ></a>
+            {% endif %}
+
+          </td>
+
+          
+
+          {% comment %} {% else %}
+          <span>Invalid ID</span>
+          {% endif %} {% endcomment %}
+        </tr>
+        {% empty %}
+          <tr>
+            <td colspan="5" style="text-align: center;">No data available</td>
+          </tr>
+          {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+
+<!--------------Add Modal Avenues--------------------------->
+<!-- Add New Address Modal -->
+<div class="modal fade" id="addNewAvenues" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-simple modal-add-new-address">
+      <div class="modal-content">
+        <div class="modal-body ">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="text-center mb-6">
+            <h4 class="address-title mb-2">Add New Avenues</h4>
+           
+          </div>
+          {% comment %} <form id="addNewAddressForm" class="row g-6" onsubmit="return false"> {% endcomment %}
+
+            <div class="col-12">
+  
+            <div class="container mt-5">
+                <h2 class="mb-4">Avenues Form</h2>
+                <form action="/avenues/add/" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    
+                    <!-- Name -->
+                    <div class="mb-3">
+                        <label for="avenues_name" class="form-label">Name</label>
+                        <input type="text" class="form-control" id="avenues_name" name="avenues_name" required>
+                    </div>
+        
+                    <!-- Username -->
+                    <div class="mb-3">
+                        <label for="avenues_username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="avenues_username" name="avenues_username" required>
+                    </div>
+        
+                    <!-- Email -->
+                    <div class="mb-3">
+                        <label for="avenues_email" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="avenues_email" name="avenues_email" required>
+                    </div>
+        
+                    <!-- Password -->
+                    <div class="mb-3">
+                        <label for="avenues_password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="avenues_password" name="avenues_password" required>
+                    </div>
+        
+                    <!-- Address -->
+                    <div class="mb-3">
+                        <label for="avenues_address" class="form-label">Address</label>
+                        <textarea class="form-control" id="avenues_address" name="avenues_address" rows="3" required></textarea>
+                    </div>
+        
+                    <!-- Slot Price -->
+                    <div class="mb-3">
+                        <label for="avenues_slot_price" class="form-label">Slot Price</label>
+                        <input type="number" class="form-control" id="avenues_slot_price" name="avenues_slot_price" step="0.01" required>
+                    </div>
+        
+                    <!-- Logo -->
+                    <div class="mb-3">
+                        <label for="avenues_logo" class="form-label">Logo</label>
+                        <input type="text" class="form-control" id="avenues_logo" name="avenues_logo" required>
+                    </div>
+        
+                    <!-- Country -->
+                    <div class="mb-3">
+                        <label for="avenues_country" class="form-label">Country</label>
+                        <input type="text" class="form-control" id="avenues_country" name="avenues_country" required>
+                    </div>
+        
+                    <!-- State -->
+                    <div class="mb-3">
+                        <label for="avenues_state" class="form-label">State</label>
+                        <input type="text" class="form-control" id="avenues_state" name="avenues_state" required>
+                    </div>
+        
+                    <!-- City -->
+                    <div class="mb-3">
+                        <label for="avenues_city" class="form-label">City</label>
+                        <input type="text" class="form-control" id="avenues_city" name="avenues_city" required>
+                    </div>
+        
+                    <!-- Pincode -->
+                    <div class="mb-3">
+                        <label for="avenues_pincode" class="form-label">Pincode</label>
+                        <input type="text" class="form-control" id="avenues_pincode" name="avenues_pincode" required>
+                    </div>
+        
+                    <!-- Submit Button -->
+                    <button type="submit" class="btn btn-primary">Submit</button>&nbsp;&nbsp;
+                    <td><a href="{% url 'avenues' %}" >Back</a></td>
+                    
+                </form>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+  <script>
+    var addTransactionBtn = '{% if perms.avenues.add_avenues %}' + true + '{% endif %}';
+    
+    </script>
+
+{% endblock %}

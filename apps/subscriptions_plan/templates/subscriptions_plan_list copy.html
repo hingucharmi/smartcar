@@ -1,0 +1,283 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Subscriptions Plan{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/form-validation.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/popular.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/auto-focus.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="{% static 'js/subscriptions_add.js' %}"></script>
+<script src="{% static 'js/transactions-delete.js' %}"></script>
+
+{% endblock page_js %}
+
+{% block content %}
+
+<div class="card">
+  {% if messages %}
+  <div id="message" class="container">
+  {% for message in messages %}
+  <div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-warning{% endif %}" role="alert">
+    {{ message }}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+  </div>
+  {% endfor %}
+  </div>
+  {% endif %}
+
+
+<!-- DataTable with Buttons -->
+  <div class="card-datatable table-responsive pt-0">
+    <table class="datatables-basic table">
+      <thead>
+        {% comment %} <th> <label text="hidden">
+          <button type="button" class="btn btn-primary position-absolute end-0 top-0 m-3" data-bs-toggle="modal"  data-bs-target="#addNewSubscriptionsPlan">
+            <i class="fa-regular fa-plus"></i>&nbsp; Add Floors
+          </button>
+          <button class= 'btn btn-label-primary dropdown-toggle me-4 waves-effect waves-light border-none' data-bs-target="#addNewSubscriptionsPlan" ><i class="ti ti-file-export ti-xs me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span>
+          </button></th> {% endcomment %}
+        <tr>
+          
+          
+          <th>Name</th>
+          <th>Description</th>
+          <th></th>
+          <th>Price</th>
+          <th>Validity</th>
+          <th>Status</th>
+          <th>date due</th>
+          <th>Actions</th>
+        </tr>
+        <tbody>
+          {% for plan in subscriptionsplan_dict %}
+          <tr>
+            
+              <td>{{ plan.subscriptions_plan_name }}</td>
+              <td>{{ plan.description }}</td>
+              <td>{{ plan.price }}</td>
+              <td>{{ plan.validity }}</td>
+              <td>{{ plan.status }}</td>
+              <td>{{ plan.due_date }}</td>
+              
+          
+              <td>
+                {% if perms.subscriptions_plan.delete_subscriptions_plan %}
+                <a href="{% url 'delete_subscriptionsplan' plan.subscriptions_plan_id %}"  class="btn me-sm-3 me-1 delete-transaction" data-transaction-username="{{ plan.subscriptions_plan_name}}">
+                  <i class="ti ti-trash ti-md"></i></a>
+                {% endif%}
+                              
+                {% if perms.subscriptions_plan.change_subscriptions_plan %}
+
+              <a href="{% url 'update_subscriptionsplan' plan.subscriptions_plan_id %}" class="d-none d-sm-inline-block"><i class='ti ti-edit ti-md'></i></a></td>
+              {% endif %}
+
+              {% empty %}
+          <tr>
+            <td colspan="5" style="text-align: center;">No data available</td>
+          </tr>
+          {% endfor %}
+      </tr>
+      </thead>
+    </table>
+  </div>
+</div>
+      
+  <!-- Add New Address Modal -->
+  <div class="modal fade" id="addNewAddress" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-simple modal-add-new-address">
+      <div class="modal-content">
+        <div class="modal-body ">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="text-center mb-6">
+            <h4 class="address-title mb-2">Add New Record</h4>
+           
+          </div>
+          {% comment %} <form id="addNewAddressForm" class="row g-6" onsubmit="return false"> {% endcomment %}
+            {% csrf_token %}
+            <div class="col-12">
+  
+              
+      <div class="container mt-5">
+        
+        <h2 class="mb-4">SubscriptionsPlan Form</h2>
+        <form action="/subscriptionplan/add/" id="addNewSubscriptionsPlan" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+
+             <!--Subscriptionplan name -->
+             <div class="row g-6">
+             <div class="mb-3">
+              <label for="subscriptionsplan_name" class="form-label">Subscriptions Plan name</label>
+              <input type="text" class="form-control dt-subscriptionsplan-name" placeholder="Name"  id="subscriptions_plan_name" name="subscriptions_plan_name" required>
+             
+          </div>
+            <!-- Description -->
+            <div class="mb-3">
+                <label for="subscriptionsplan_description" class="form-label"> Subscriptionplan Description</label>
+                <input type="text" class="form-control dt-subscriptionsplan_description" id="description" name="description" placeholder="Description" required>
+            </div>
+            
+            <!-- Price -->
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="number" class="form-control dt-price" id="price" name="price" placeholder="Price" required>
+            </div>
+  
+            <!-- Validity -->
+            <div class="mb-3">
+                <label for="validity" class="form-label">Validity</label>
+                <input type="number" class="form-control dt-validity" id="validity" name="validity" placeholder="Validity" required>
+            </div>
+
+            <!-- due- date -->
+            <div class="mb-3">
+              <label for="validity" class="form-label">Due Date</label>
+              <input type="date" class="form-control dt-due-date" id="due_date" name="due_date" placeholder="Due Date" required>
+          </div>
+
+            <!--Status-->
+            <div class="mb-3">
+              <label for="floors_status" class="form-label">Status</label>
+              <select id="status" class="select2 form-select" name="status" placeholder="Select Status">
+                <option value="" disabled selected class="d-none"></option>
+                <option value="Paid">Paid</option>
+                <option value="Due">Due</option>
+                <option value="Canceled">Canceled</option>
+              </select>
+            </div>
+
+            
+          </div>
+  
+            <!-- Submit Button -->
+            <div class="col-12 text-center">
+              <button type="submit" class="btn btn-primary me-3">Submit</button>
+              <a href="{% url 'subscriptionsplan' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+            
+        </form>
+    </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script>
+    var addTransactionBtn = '{% if perms.subscriptions_plan.add_subscriptions_plan %}' + true + '{% endif %}';
+    
+    </script>
+  <!--/ Add New Address Modal -->
+  
+<!---------------------------UPDATE Form---------------------------------------------------->
+  
+  <!-- Add New Address Modal Update -->
+  {% comment %} <div class="modal fade" id="updateNewSubscriptionsPlan" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-simple modal-update-new-address">
+      <div class="modal-content">
+        <div class="modal-body ">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="text-center mb-6">
+            <h4 class="address-title mb-2">Update New Record</h4>
+           
+          </div>
+          {% for plan in subscriptions_plan %}
+          <form class="update-transaction pt-0" id="updateNewSubscriptionsPlan" action="{% url 'update_subscriptionsplan' plan.subscriptions_plan_id %}" method="POST" enctype="multipart/form-data">
+                
+            {% csrf_token %}  
+
+            <input type="hidden" name="subscriptions_plan_id" id="subscriptions_plan_id">
+
+             <!--Subscriptionplan name -->
+             <div class="row g-6">
+             <div class="mb-3">
+              <label for="subscriptionsplan_name" class="form-label">Subscriptions Plan name</label>
+              <input type="text" class="form-control dt-subscriptionsplan-name" placeholder="Name" id="subscriptions_plan_name" value="{{ plan.subscriptions_plan_name }}" name="subscriptions_plan_name" required>
+             
+          </div>
+            <!-- Description -->
+            <div class="mb-3">
+                <label for="subscriptionsplan_description" class="form-label"> Subscriptionplan Description</label>
+                <input type="text" class="form-control dt-subscriptionsplan_description" id="description" name="description" value="{{ plan.descritpion }}"placeholder="Description" required>
+            </div>
+            
+            <!-- Price -->
+            <div class="mb-3">
+                <label for="price" class="form-label">Price</label>
+                <input type="number" class="form-control dt-price" id="price" name="price"  value="{{ plan.price }}" placeholder="Price" required>
+            </div>
+  
+            <!-- Validity -->
+            <div class="mb-3">
+                <label for="validity" class="form-label">Validity</label>
+                <input type="number" class="form-control dt-validity" id="validity" name="validity" value="{{ plan.validity }}" placeholder="Validity" required>
+            </div>
+
+            <!-- due- date -->
+            <div class="mb-3">
+              <label for="validity" class="form-label">Due Date</label>
+              <input type="date" class="form-control dt-due-date" id="due_date"  value="{{ subscriptions_plan_id.due_date|date:'c' }}" name="due_date" placeholder="Due Date" required>
+          </div>
+
+            <!--Status-->
+            <div class="mb-3">
+              <label for="floors_status" class="form-label">Status</label>
+              <select id="customer-status" class="select2 form-select" name="status">
+                <option value="Paid" {% if subscriptions_plan_id.status == 'Paid' %} selected {% endif %}>Paid</option>
+                <option value="Due" {% if subscriptions_plan_id.status == 'Due' %} selected {% endif %}>Due</option>
+                <option value="Canceled" {% if subscriptions_plan_id.status == 'Canceled' %} selected {% endif %}>Canceled</option>
+              </select>
+            </div>
+
+            
+          </div>
+  
+            <!-- Submit Button -->
+            <div class="col-12 text-center">
+              <button type="submit" class="btn btn-primary me-3">Submit</button>
+              <button type="reset" class="btn btn-label-secondary" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+            </div>
+            
+        </form>
+        {% endfor%}
+    </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  {% endcomment %}
+  <!--/ Add New Address Modal -->
+  
+  <!--/ Add New Address Modal -->
+  
+  
+
+
+{% endblock %}

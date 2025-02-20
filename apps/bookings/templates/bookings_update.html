@@ -1,0 +1,109 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Floors{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/form-validation.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/popular.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/auto-focus.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/slots.js' %}"></script>
+<script src="{% static 'js/transactions-delete.js' %}"></script>
+
+{% endblock page_js %}
+
+{% block content %}
+
+
+
+
+<div class="card">
+
+
+  <div class="card-body">
+<div class="container mt-5">
+        
+  <h2 class="mb-4">Booking Form</h2>
+  <form action="{% url 'bookings_update' bookings.bookings_id %}"  method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      
+
+         <div class="row g-6">
+        
+        <!-- Name -->
+        <div class="mb-3">
+            <label for="bookings_customers" class="form-label"> Customers Name</label>
+            <select name="bookings_customers" class="form-control dt-customers-id" id="bookings_customers" placeholder = "Customers Name"  required>
+              {% for customers in customers_dict %}
+              
+              <option value="{{ customers.customers_id }}"  {% if bookings.bookings_customers.customers_id == customers.customers_id %} selected {% endif %}>
+                {{ customers.customers_username }}</option>
+              {% endfor %}
+          </select>
+            </div>
+        
+        <!-- plane -->
+        <div class="mb-3">
+            <label for="bookings_slots" class="form-label">Slot Name{{bookings.bookings_slots.slots_id}}</label>
+            <select name="bookings_slots" class="form-control dt-slots-id" id="bookings_slots" placeholder="Slots Name" required>
+              {% for slots in slots_dict %}
+              
+              <option value="{{ slots.slots_id }}"  {% if bookings.bookings_slots.slots_id == slots.slots_id %} selected {% endif %}>
+                {{ slots.slots_name }}</option>
+              {% endfor %}
+          </select>
+          </div>
+
+                   
+        <div class="mb-3">
+          <label for="bookings_price" class="form-label">Price</label>
+          <input type="number" class="form-control dt-bookings_price" id="bookings_price" name="bookings_price" value="{{bookings.bookings_price}}" placeholder="Price" required>
+        </div>
+
+       <div class="mb-3">
+        <label for="start_date" class="form-label">Start Date</label>
+        <input type="date" class="form-control dt-start_date" id="start_date" name="start_date" value="{{bookings.start_date|date:'Y-m-d'}}" placeholder="Start Date" required>
+      </div>
+
+      <div class="mb-3">
+        <label for="end_date" class="form-label">End Date</label>
+        <input type="date" class="form-control dt-end_date" id="end_date" name="end_date"  value="{{bookings.end_date|date:'Y-m-d'}}"  placeholder="End Date" required>
+      </div> 
+
+
+
+        <!-- Submit Button -->
+        <div class="col-12 text-left">
+          <button type="submit" class="btn btn-primary me-3">Submit</button>
+          <a href="{% url 'bookings' %}" class="btn btn-secondary">Cancel</a>
+        </div>
+        
+    </form>
+</div> 
+</div> 
+</div> 
+
+
+
+{% endblock %}

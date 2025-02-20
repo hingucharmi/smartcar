@@ -1,0 +1,43 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Academy - Dashboard - App{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/apex-charts/apex-charts.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/apex-charts/apexcharts.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/app-academy-dashboard.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+
+          
+                        <li><a  href="{% url 'avenues_form' %}">Avenues From</a></li>
+                        <li><a  href="{% url 'view_avenues' %}">Avenues View </a></li>
+                        
+                      {% comment %} <li><a class="dropdown-item" href="{% url 'view_avenues' %}">View Data</a></li>
+                      <li><a class="dropdown-item" href="{% url 'floors_form'%}">Add Floor data</a></li>
+                      <li><a class="dropdown-item" href="{% url 'view_floors'%}">View Floor Data</a></li>
+                       {% endcomment %}
+                   
+
+    
+    
+
+{% endblock %}

@@ -1,0 +1,211 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Floors{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/form-validation.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/popular.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/auto-focus.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="{% static 'js/devices.js' %}"></script>
+<script src="{% static 'js/transactions-delete.js' %}"></script>
+
+{% endblock page_js %}
+
+{% block content %}
+<!-- DataTable with Buttons -->
+<div class="card">
+  
+{% if messages %}
+<div id="message" class="container">
+{% for message in messages %}
+<div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-warning{% endif %}" role="alert">
+  {{ message }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+</div>
+{% endif %}
+  <div class="card-datatable table-responsive pt-0">
+    <table class="datatables-basic table">
+      <thead>
+        <tr>
+        
+          <th>Devices Code</th>
+          <th>Device ID</th> 
+          <th>Type of Device</th>
+          <th>Type of Device</th>
+
+          <th>Avenues Name</th>
+          <th>Vendors Name</th>
+          <th>Image</th>
+          <th>State</th>
+          <th>Status</th>
+          <th>Actions</th>
+
+         
+        </tr>
+        <tbody>
+          {% for devices in devices_dict %}
+          <tr>
+            
+              <td>{{ devices.devices_name }}</td>
+              <td>{{ devices.devices_mac }}</td>
+              <td>{{ devices.devices_type }}</td>
+              <td>{{ devices.devices_avenues.avenues_name }}</td>
+              <td>{{ devices.devices_vendors }}</td>
+              <td>{{ devices.devices_image }}</td>
+
+              <td>{{ devices.devices_state }}</td>
+
+              <td>{{ devices.devices_status }}</td>          
+          
+              <td>
+                {% if perms.devices.delete_devices %}
+                
+                <a href="{% url 'devices_delete' devices.devices_id %}" class="btn me-sm-3 me-1 delete-transaction" data-transaction-username="{{ devices.devices_name }}">
+                  <i class="ti ti-trash ti-md"></i></a>
+                  {%endif%}
+
+                {% if perms.devices.change_devices %}
+              
+                <a href="{% url 'devices_update' devices.devices_id %}" class="btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill" data-bs-target="#addNewAddress"><i class="ti ti-pencil ti-md"></i></a>
+                {% endif %}
+            </td>
+              
+            {% endfor %}
+      </tr>
+      </thead>
+    </table>
+  </div>
+</div>
+
+  <!-- Add New Address Modal -->
+  <div class="modal fade" id="addNewAddress" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-simple modal-add-new-address">
+      <div class="modal-content">
+        <div class="modal-body ">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="text-center mb-6">
+            <h4 class="address-title mb-2">Add New Record</h4>
+           
+          </div>
+          {% comment %} <form id="addNewAddressForm" class="row g-6" onsubmit="return false"> {% endcomment %}
+
+            <div class="col-12">
+  
+              
+      <div class="container mt-5">
+        
+        <h2 class="mb-4">Devices Form</h2>
+        <form action="/devices/add/" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+          
+             <!--Avenue id -->
+             <div class="row g-6">
+             <div class="mb-3">
+              <label for="devices_name" class="form-label">Devices name</label>
+              <input type="text" class="form-control dt-devices-name" id="devices_name" name="devices_name" placeholder="Device Name" required>
+
+              
+          </div>
+            <!-- Name -->
+            <div class="mb-3">
+                <label for="devices_mac" class="form-label"> Device MacAddress</label>
+                <input type="text" class="form-control dt-devices_mac" id="devices_mac" name="devices_mac" placeholder="Mac Address" required>
+                
+                </div>
+            
+            <!-- plane -->
+            <div class="mb-3">
+                <label for="devices_type" class="form-label">Type</label>
+                <input type="number" class="form-control dt-devices_type" id="devices_type" name="devices_type" placeholder="Type"required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="devices_image" class="form-label">Image</label>
+              <input type="text" class="form-control dt-devices_image" id="devices_image" name="devices_image" placeholder="Image" required>
+            </div>
+
+            
+            <div class="mb-3">
+                <label for="devices_avenues" class="form-label">Avenues Name</label>
+                <select name="avenues_id" class="form-control dt-devices_avenues" id="avenues_id" required>
+                    <option disabled selected>Select Avenues Name</option>
+                    {% for avenues in avenues_dict %}
+                    
+                    <option value="{{ avenues.avenues_id }}">{{ avenues.avenues_name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+  
+
+            <div class="mb-3">
+                <label for="devices_vendors" class="form-label">Vendors Name</label>
+                <select name="vendors_id" class="form-control dt-devices_vendors" id="vendors_id" required>
+                    <option disabled selected>Select Vendors Name</option>
+                    {% for vendors in vendors_dict %}
+                    
+                    <option value="{{ vendors.vendors_id }}">{{ vendors.vendors_username }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+
+  
+            <!-- Slot Price -->
+            <div class="mb-3">
+                <label for="devices_state" class="form-label">State</label>
+                <input type="number" class="form-control dt-devices_state" id="devices_state" name="devices_state" placeholder="State" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="devices_status" class="form-label">Status</label>
+                <input type="number" class="form-control dt-devices_status" id="devices_status" name="devices_status" placeholder="Status" required>
+            </div>
+            
+
+
+            <!-- Submit Button -->
+            <div class="col-12 text-center">
+              <button type="submit" class="btn btn-primary me-3">Submit</button>
+              <a href="{% url 'devices' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+            
+        </form>
+    </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--/ Add New Address Modal -->
+  
+  
+  <script>
+    var addTransactionBtn = '{% if perms.devices.add_devices %}' + true + '{% endif %}';
+    
+    </script>
+
+{% endblock %}

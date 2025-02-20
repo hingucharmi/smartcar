@@ -1,0 +1,81 @@
+{
+  "menu": [
+
+  {
+    "menu_header": "Admin"
+  },
+    
+    {
+      "url": "avenues",
+      "icon": "menu-icon fa-solid fa-house",
+      "name": "Avenue",
+      "slug": "avenues"
+    },
+    {
+      "url": "floors",
+      "icon": "menu-icon fa-solid fa-stairs",
+      "name": "Floor",
+      "slug": "floors"
+    },
+    {
+      "url": "zones",
+      "icon": "menu-icon fa-solid fa-car",
+      "name": "Zone",
+      "slug": "zones"
+    },
+    {
+      "url": "subscriptionsplan",
+      "icon": "menu-icon fa-regular fa-pen-to-square",
+      "name": "Subscription Plan",
+      "slug": "subscriptionsplan"
+    },
+    
+
+    {
+      "menu_header": "vendors"
+    },
+    {
+      "url": "vendors",
+      "icon": "menu-icon fa-solid fa-handshake",
+      "name": "Vendor",
+      "slug": "vendors"
+    },
+    {
+      "url": "devices",
+      "icon": "menu-icon fa-solid fa-microchip",
+      "name": "Device",
+      "slug": "devices"
+    },
+    {
+      "url": "slots",
+      "icon": "menu-icon fa-solid fa-square-poll-vertical",
+      "name": "Slot Management",
+      "slug": "slots"
+    },
+
+    {
+      "menu_header": "Customers"
+    },
+        
+    {
+      "url": "customers",
+      "icon": "menu-icon fa-duotone fa-regular fa-user",
+      "name": "Customer",
+      "slug": "customers"
+    },
+    {
+      "url": "subscriptions",
+      "icon": "menu-icon fa-solid fa-tag",
+      "name": "Customer Subscription",
+      "slug": "subscriptions"
+    },
+      
+    {
+      "url": "bookings",
+      "icon": "menu-icon fa-regular fa-calendar-check",
+      "name": "Booking",
+      "slug": "slots"
+    }
+  ] 
+}
+

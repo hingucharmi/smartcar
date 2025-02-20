@@ -1,0 +1,109 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Academy - Dashboard - App{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/apex-charts/apex-charts.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/apex-charts/apexcharts.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/app-academy-dashboard.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+ 
+
+
+    <div class="container mt-5">
+        <h2 class="mb-4">Avenues Form</h2>
+        <form action="add_avenues" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <!-- Name -->
+            <div class="mb-3">
+                <label for="avenues_name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="avenues_name" name="avenues_name" required>
+            </div>
+
+            <!-- Username -->
+            <div class="mb-3">
+                <label for="avenues_username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="avenues_username" name="avenues_username" required>
+            </div>
+
+            <!-- Email -->
+            <div class="mb-3">
+                <label for="avenues_email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="avenues_email" name="avenues_email" required>
+            </div>
+
+            <!-- Password -->
+            <div class="mb-3">
+                <label for="avenues_password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="avenues_password" name="avenues_password" required>
+            </div>
+
+            <!-- Address -->
+            <div class="mb-3">
+                <label for="avenues_address" class="form-label">Address</label>
+                <textarea class="form-control" id="avenues_address" name="avenues_address" rows="3" required></textarea>
+            </div>
+
+            <!-- Slot Price -->
+            <div class="mb-3">
+                <label for="avenues_slot_price" class="form-label">Slot Price</label>
+                <input type="number" class="form-control" id="avenues_slot_price" name="avenues_slot_price" step="0.01" required>
+            </div>
+
+            <!-- Logo -->
+            <div class="mb-3">
+                <label for="avenues_logo" class="form-label">Logo</label>
+                <input type="text" class="form-control" id="avenues_logo" name="avenues_logo" required>
+            </div>
+
+            <!-- Country -->
+            <div class="mb-3">
+                <label for="avenues_country" class="form-label">Country</label>
+                <input type="text" class="form-control" id="avenues_country" name="avenues_country" required>
+            </div>
+
+            <!-- State -->
+            <div class="mb-3">
+                <label for="avenues_state" class="form-label">State</label>
+                <input type="text" class="form-control" id="avenues_state" name="avenues_state" required>
+            </div>
+
+            <!-- City -->
+            <div class="mb-3">
+                <label for="avenues_city" class="form-label">City</label>
+                <input type="text" class="form-control" id="avenues_city" name="avenues_city" required>
+            </div>
+
+            <!-- Pincode -->
+            <div class="mb-3">
+                <label for="avenues_pincode" class="form-label">Pincode</label>
+                <input type="text" class="form-control" id="avenues_pincode" name="avenues_pincode" required>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary">Submit</button>&nbsp;&nbsp;
+            <td><a href="{% url 'avenues' %}" >Back</a></td>
+            
+        </form>
+    </div>
+{% endblock %}

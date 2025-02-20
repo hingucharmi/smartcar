@@ -1,0 +1,118 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Floors{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/form-validation.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/popular.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/auto-focus.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/slots.js' %}"></script>
+<script src="{% static 'js/transactions-delete.js' %}"></script>
+
+{% endblock page_js %}
+
+{% block content %}
+
+<div class='card'>
+  <div class='card-body'>
+
+<div class="container mt-5">
+        
+  <h2 class="mb-4">Slots Form</h2>
+  <form action="{% url 'slots_update' slots.slots_id %}"  method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+    
+       <div class="row g-6">
+        <input type="hidden" name="slots_id" id="slots_id" value="{{slots.slots_id}}">
+       <div class="mb-3">
+        <label for="slots_name" class="form-label">Slots name</label>
+        <input type="text" class="form-control dt-slots_name" id="slots_name" name="slots_name" value="{{ slots.slots_name }}" placeholder="Slots Name" required>
+    </div>
+
+      <!-- Name -->
+      <div class="mb-3">
+          <label for="slots_zones" class="form-label"> Zones Name</label>
+          <select name="slots_zones" class="form-control dt-slots_zones" id="slots_zones" required>
+            {% for zones in zones_dict %}
+                <option value="{{ zones.zones_id }}" {% if slots.slots_zones.zones_id == zones.zones_id %} selected {% endif %}>
+                    {{ zones.zones_name }}
+                </option>
+                {% endfor %}
+        </select>
+          </div>
+      
+      <!-- plane -->
+      <div class="mb-3">
+          <label for="slots_vendors" class="form-label">Vendors Name</label>
+          <select name="slots_vendors" class="form-control dt-slots_vendors" id="slots_vendors" required>
+            {% for vendors in vendors_dict %}
+            
+            <option value="{{ vendors.vendors_id }}" {% if slots.slots_vendors.vendors_id == vendors.vendors_id %} selected {% endif %}>
+              {{ vendors.vendors_username }}</option>
+            {% endfor %}
+        </select>
+        </div>
+
+      <!-- Slot Price -->
+      <div class="mb-3">
+          <label for="slots_devices" class="form-label">Devices Name</label>
+          <select name="slots_devices" class="form-control dt-slots_devices" id="slots_devices" required>
+            <option disabled selected>Select devices Name</option>
+            {% for devices in devices_dict %}
+            
+            <option value="{{ devices.devices_id }}" {% if slots.slots_devices.devices_id == devices.devices_id %} selected {% endif %}>
+              {{ devices.devices_name }}</option>
+            {% endfor %}
+        </select>
+        </div>
+      
+      <div class="mb-3">
+        <label for="slots_price" class="form-label">Price</label>
+        <input type="number" class="form-control dt-slots_price" id="slots_price" name="slots_price" value="{{ slots.slots_price }}"  placeholder="Price" required>
+      </div>
+
+    <div class="mb-3">
+      <label for="slots_status" class="form-label">Status</label>
+      <input type="number" class="form-control dt-slots_status" id="slots_status" name="slots_status" value="{{ slots.slots_status }}"  placeholder="Status" required>
+    </div>
+
+      <!-- Submit Button -->
+      <div class="col-12 text-left">
+        <button type="submit" class="btn btn-primary me-3">Submit</button>
+        <a href="{% url 'slots' %}" class="btn btn-secondary">Cancel</a>
+      </div>
+      
+  </form>
+</div> 
+</div>
+</div>
+
+<script>
+  var addTransactionBtn = '{% if perms.slots.add_slots %}' + true + '{% endif %}';
+  
+  </script>
+
+
+{% endblock %}

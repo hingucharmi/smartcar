@@ -1,0 +1,194 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Vendors - Pages{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/form-validation.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/popular.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/auto-focus.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="{% static 'js/vendors_list.js' %}"></script>
+<script src="{% static 'js/transactions-delete.js' %}"></script>
+
+{% endblock page_js %}
+
+{% block content %}
+<!-- DataTable with Buttons -->
+<div class="card">
+
+  {% if messages %}
+<div id="message" class="container">
+{% for message in messages %}
+<div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-warning{% endif %}" role="alert">
+  {{ message }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+</div>
+{% endif %}
+
+  <div class="card-datatable table-responsive pt-0">
+    <table class="datatables-basic table">
+      <thead>
+        <tr>
+          <th>Vendors Name</th>
+          <th>Avenues Name</th>
+
+          <th>Email</th> 
+          <th>Email</th> 
+          <th>Phone</th>
+          <th>Address</th>
+          <th>Logo</th>
+          <th>Action</th>
+
+          
+        </tr>
+        <tbody>
+          {% for vendors in vendors_dict %}
+          <tr>
+            
+              <td>{{ vendors.vendors_username }}</td>
+              <td>{{ vendors.vendors_avenues.avenues_name }}</td>
+              <td>{{ vendors.vendors_email }}</td>
+              <td>{{ vendors.vendors_phone }}</td>
+              <td>{{ vendors.vendors_address }}</td>
+              <td>{{ vendors.vendors_logo }}</td>
+
+              
+          
+              <td>
+                {% if perms.vendors.delete_vendors %}
+                
+                <a href="{% url 'vendors_delete' vendors.vendors_id %}" class="btn me-sm-3 me-1 delete-transaction" data-transaction-username="{{ vendors.vendors_username }}">
+                  <i class="ti ti-trash ti-md"></i></a>
+                {%endif %}
+                {% if perms.vendors.change_vendors %}
+
+              <a href="{% url 'vendors_update' vendors.vendors_id %}" class="btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill" data-bs-target="#addNewAddress"><i class="ti ti-pencil ti-md"></i></a>
+                {% endif %}
+            </td>
+          </tr>
+          {% empty %}
+          <tr>
+            <td colspan="5" style="text-align: center;">No data available</td>
+          </tr>
+          {% endfor %}
+      </thead>
+    </table>
+  </div>
+</div>
+
+  <!-- Add New Address Modal -->
+  <div class="modal fade" id="addNewAddress" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-simple modal-add-new-address">
+      <div class="modal-content">
+        <div class="modal-body ">
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <div class="text-center mb-6">
+            <h4 class="address-title mb-2">Add New Record</h4>
+           
+          </div>
+          {% comment %} <form id="addNewAddressForm" class="row g-6" onsubmit="return false"> {% endcomment %}
+
+            <div class="col-12">
+  
+              
+      <div class="container mt-5">
+        
+        <h2 class="mb-4">Vendors Form</h2>
+        <form action="/vendors/add/" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+          
+             <!--Avenue id -->
+             <div class="row g-6">
+             <div class="mb-3">
+              <label for="vendors_username" class="form-label">Vendors name</label>
+              <input type="text" class="form-control dt-vendors_username" id="vendors_username" name="vendors_username" placeholder="Vendor Name" required>
+          </div>
+
+
+          <div class="mb-3">
+            <label for="vendors_avenues" class="form-label">Avenues Name</label>
+            <select name="avenues_id" class="form-control dt-devices_avenues" id="avenues_id" required>
+                <option disabled selected>Select Avenues Name</option>
+                {% for avenues in avenues_dict %}
+                
+                <option value="{{ avenues.avenues_id }}">{{ avenues.avenues_name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+            <!-- Name -->
+            <div class="mb-3">
+                <label for="vendors_email" class="form-label"> Email</label>
+                <input type="email" class="form-control dt-vendors_email" id="vendors_email" name="vendors_email" placeholder="abc@mail.com" required>
+                
+                </div>
+            
+            <!-- plane -->
+            <div class="mb-3">
+                <label for="vendors_password" class="form-label">Password</label>
+                <input type="password" class="form-control dt-vendors_password" id="vendors_password" name="vendors_password" placeholder="Password"required>
+            </div>
+  
+            <!-- Slot Price -->
+            <div class="mb-3">
+                <label for="vendors_phone" class="form-label">Phone</label>
+                <input type="text" class="form-control dt-vendors_phone" id="vendors_phone" name="vendors_phone" placeholder="+12125552368" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="vendors_address" class="form-label">Address</label>
+              <input type="textarea" class="form-control dt-vendors_address" id="vendors_address" name="vendors_address" placeholder="Address" required>
+            </div>
+
+          <div class="mb-3">
+            <label for="vendors_logo" class="form-label">Logo</label>
+            <input type="text" class="form-control dt-vendors_logo" id="vendors_logo" name="vendors_logo" placeholder="Logo" required>
+          </div>
+  
+            <!-- Submit Button -->
+            <div class="col-12 text-center">
+              <button type="submit" class="btn btn-primary me-3">Submit</button>
+              <a href="{% url 'vendors' %}" class="btn btn-secondary">Cancel</a>
+            </div>
+            
+        </form>
+    </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!--/ Add New Address Modal -->
+  
+  <script>
+    var addTransactionBtn = '{% if perms.vendors.add_vendors %}' + true + '{% endif %}';
+    
+    </script>
+
+{% endblock %}

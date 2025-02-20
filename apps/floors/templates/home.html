@@ -1,0 +1,176 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Floors{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/form-validation.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/popular.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/auto-focus.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script src="{% static 'js/home_add.js' %}"></script>
+<script src="{% static 'js/transactions-delete.js' %}"></script>
+
+{% endblock page_js %}
+
+{% block content %}
+<!-- DataTable with Buttons -->
+
+<div class="card">
+  
+{% if messages %}
+<div id="message" class="container">
+{% for message in messages %}
+<div class="alert {% if message.tags == 'success' %}alert-success{% elif message.tags == 'error' %}alert-danger{% else %}alert-warning{% endif %}" role="alert">
+  {{ message }}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endfor %}
+</div>
+{% endif %}
+  <div class="card-datatable table-responsive pt-0">
+    <table class="datatables-basic table">
+      <thead>
+        {% comment %} <th> <label text="hidden">
+          <button type="button" class="btn btn-primary position-absolute end-0 top-0 m-3" data-bs-toggle="modal"  data-bs-target="#addNewAddress">
+            <i class="fa-regular fa-plus"></i>&nbsp; Add Floors
+          </button>
+          <button class= 'btn btn-label-primary dropdown-toggle me-4 waves-effect waves-light border-none' data-bs-target="#addNewAddress" ><i class="ti ti-file-export ti-xs me-sm-1"></i> <span class="d-none d-sm-inline-block">Export</span>
+          </button></th> {% endcomment %}
+        <tr>
+          <th>Avenue Name</th>
+          <th>Floor name</th> 
+          <th>Floor Plan</th>
+          <th>Floor Plan</th>
+          <th>Slot Price</th>
+          <th>Action</th>
+        </tr>
+        <tbody>
+          {% for floors in floors_dict %}
+          <tr>
+            
+              {% comment %} <td>{{ floors.floors_id }}</td> {% endcomment %}
+              <td>{{ floors.floors_avenues_id.avenues_name }}</td>
+              <td>{{ floors.floors_name }}</td>
+              <td>{{ floors.floors_plan}}</td>
+              <td>{{ floors.floors_slot_price }}</td>
+              
+          
+              <td>
+                {% if perms.floors.delete_floors %}
+                
+                <a href="{% url 'floors_delete' floors.floors_id %}" class="btn me-sm-3 me-1 delete-transaction" data-transaction-username="{{ floors.floors_name }}">
+                  <i class="ti ti-trash ti-md"></i></a>
+                {%endif %}
+
+                              
+                {% if perms.floors.change_floors %}
+
+              <a href="{% url 'floors_update' floors.floors_id %}" class="btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill" data-bs-target="#addNewAddress"><i class='ti ti-edit ti-md'></i></a></td>
+              {% endif %}
+            {% endfor %}
+      </tr>
+      </thead>
+    </table>
+  </div>
+</div>
+
+ <!-- Add New Address Modal -->
+ <div class="modal fade" id="addNewAddress" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-simple modal-add-new-address">
+    <div class="modal-content">
+      <div class="modal-body ">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="text-center mb-6">
+          <h4 class="address-title mb-2">Add New Record</h4>
+        </div>
+
+
+
+<div class="col-12">
+
+            
+    <div class="container mt-5">
+      
+      <h2 class="mb-4">Floors Form</h2>
+      <form action="/floors/add/" method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          
+
+           <!--Avenue id -->
+           <div class="row g-6">
+           <div class="mb-3">
+            <label for="avenues_id" class="form-label">Avenue name</label>
+            <select name="avenues_id" class="form-control dt-avenues-name" id="avenues_id" required>
+                    <option value="" disabled selected>Select a Avenue Name</option>
+                    {% for avenues in avenues_dict %}
+                    
+                    <option value="{{ avenues.avenues_id }}">{{ avenues.avenues_name }}</option>
+                    {% endfor %}
+                </select>
+        </div>
+          <!-- Name -->
+          <div class="mb-3">
+              <label for="floors_name" class="form-label"> Floor Name</label>
+              <input type="text" class="form-control dt-floors-name" id="floors_name" name="floors_name" required>
+          </div>
+          
+          <!-- plane -->
+          <div class="mb-3">
+              <label for="floors_plan" class="form-label">Floor Plan</label>
+              <input type="text" class="form-control dt-floors-plan" id="floors_plan" name="floors_plan" required>
+          </div>
+
+          <!-- Slot Price -->
+          <div class="mb-3">
+              <label for="floors_slot_price" class="form-label">Slot Price</label>
+              <input type="number" class="form-control dt-floors-solt-price" id="floors_slot_price" name="floors_slot_price" required>
+          </div>
+          
+       
+          <!-- Submit Button -->
+          <div class="mb-3">
+            <button type="submit" class="btn btn-primary me-3">Submit</button>
+            <a href="{% url 'floors' %}" class="btn btn-secondary">Cancel</a> 
+          </div>
+        </div>
+      </form>
+  </div>
+  </div>
+
+  
+</div>
+</div>
+</div>
+</div>
+
+<!--/ Add New Address Modal -->
+{% comment %} 
+  <script>
+    var addTransactionBtn = '{% if perms.floors.add_floors %}' + true + '{% endif %}';
+    
+    </script> {% endcomment %}
+
+{% endblock %}

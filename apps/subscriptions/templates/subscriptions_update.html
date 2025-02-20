@@ -1,0 +1,120 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Floors{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-checkboxes-jquery/datatables.checkboxes.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/flatpickr/flatpickr.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-rowgroup-bs5/rowgroup.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/@form-validation/form-validation.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/flatpickr/flatpickr.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/popular.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/@form-validation/auto-focus.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/subscription_cust_list.js' %}"></script>
+<script src="{% static 'js/transactions-delete.js' %}"></script>
+
+{% endblock page_js %}
+
+{% block content %}
+
+<div class='card'>
+  
+  <div class='card-body'>
+<div class="col-12">
+    <div class="container mt-5">
+        <h2 class="mb-4">Subscriptions Form</h2>
+        <form action="{% url 'subscriptions_update' subscriptions.subscriptions_id %}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+          
+             <!--Avenue id -->
+            <div class="row g-6">
+            <input type="hidden" name="subscriptions_id" value="{{ subscriptions.subscriptions_id }}" id=" subscriptions_id">
+
+            <div class="mb-3">
+                <label for="subscriptions_customers" class="form-label">Customer name</label>
+                <select name="subscriptions_customers" class="form-control dt-customers_id" id="subscriptions_customers" required>
+               
+                    {% for customers in customers_dict %}
+                    <option value="{{ customers.customers_id }}" {% if subscriptions.subscriptions_customers.customers_id == customers.customers_id %} selected {% endif %}>
+                            {{ customers.customers_username }}
+                    </option>
+                    {% endfor %}
+                     
+                </select>
+          </div>
+            <!-- Name -->
+            {% comment %} <div class="mb-3">
+                <label for="subscriptions_subscriptionsplans" class="form-label"> Subscriptions Plan</label>
+                <select name="subscriptions_subscriptionsplans" class="form-control dt-subscriptions_plan_id" id="subscriptions_subscriptionsplans" required>
+                  {% for subscriptionsplan in subscriptionsplan_dict %}
+
+                  <option value="{{subscriptionsplan.subscriptions_plan_id}}" {% if subscriptions.subscriptions_subscriptionsplans.subscriptions_plan_id == subscriptionsplan.subscriptions_plan_id %} selected {% endif %}>
+                     {{subscriptionsplan.subscriptions_plan_name}}
+                    </option>
+                  {%endfor%}
+                </select>
+                </div> {% endcomment %}
+            
+            <!-- plane -->
+            <div class="mb-3">
+                <label for="subscriptions_price" class="form-label">Price</label>
+                <input type="number" class="form-control dt-floors-plan" id="subscriptions_price" name="subscriptions_price" value="{{ subscriptions.subscriptions_price }}" required>
+            </div>
+  
+            <!-- Slot Price -->
+            <div class="mb-3">
+                <label for="subscriptions_validity" class="form-label">Validity</label>
+                <input type="number" class="form-control dt-subscriptions_validity" id="subscriptions_validity" name="subscriptions_validity" value="{{ subscriptions.subscriptions_validity }}" required>
+            </div>
+            
+            <div class="mb-3">
+              <label for="start_ts" class="form-label">Start Date</label>
+              <input type="date" class="form-control dt-start_ts" id="start_ts" name="start_ts" value="{{ subscriptions.start_ts|date:'Y-m-d' }}" required>
+            </div>
+
+          {% comment %} <div class="mb-3">
+            <label for="end_ts" class="form-label">End Date</label>
+            <input type="date" class="form-control dt-end_ts" id="end_ts" name="end_ts" required>
+          </div> {% endcomment %}
+  
+            <!-- Submit Button -->
+            <div class="col-12 text-left">
+              <button type="submit" class="btn btn-primary me-3">Submit</button>
+              <a href="{% url 'subscriptions' %}" class="btn btn-secondary">Cancel</a> 
+            </div>
+            
+            
+        </form>
+    </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--/ Add New Address Modal -->
+  
+  
+
+
+{% endblock %}

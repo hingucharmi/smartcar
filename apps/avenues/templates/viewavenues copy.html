@@ -1,0 +1,81 @@
+{% extends layout_path %}
+
+{% load static %}
+{% load i18n %}
+
+{% block title %}Academy - Dashboard - App{% endblock %}
+
+{% block vendor_css %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-bs5/datatables.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/datatables-buttons-bs5/buttons.bootstrap5.css' %}" />
+<link rel="stylesheet" href="{% static 'vendor/libs/apex-charts/apex-charts.css' %}" />
+{% endblock vendor_css %}
+
+{% block vendor_js %}
+{{ block.super }}
+<script src="{% static 'vendor/libs/moment/moment.js' %}"></script>
+<script src="{% static 'vendor/libs/datatables-bs5/datatables-bootstrap5.js' %}"></script>
+<script src="{% static 'vendor/libs/apex-charts/apexcharts.js' %}"></script>
+{% endblock vendor_js %}
+
+{% block page_js %}
+{{ block.super }}
+<script src="{% static 'js/app-academy-dashboard.js' %}"></script>
+{% endblock page_js %}
+
+{% block content %}
+ 
+
+<h1>Avenues Data</h1>
+<table border="1">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Username</th>
+            <th>Email</th>
+            <th>Address</th>
+            <th>Slot Price</th>
+            <th>Logo</th>
+            <th>Country</th>
+            <th>State</th>
+            <th>City</th>
+            <th>Pincode</th>
+            <th>Action</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        {% for avenues in avenues_dict %}
+        <tr>
+            <td>{{ avenues.avenues_id }}</td>
+            <td>{{ avenues.avenues_name }}</td>
+            <td>{{ avenues.avenues_username }}</td>
+            <td>{{ avenues.avenues_email }}</td>
+            <td>{{ avenues.avenues_address }}</td>
+            <td>{{ avenues.avenues_slot_price }}</td>
+            <td>{{ avenues.avenues_logo }}</td>
+            <td>{{ avenues.avenues_country }}</td>
+            <td>{{ avenues.avenues_state }}</td>
+            <td>{{ avenues.avenues_city }}</td>
+            <td>{{ avenues.avenues_pincode }}</td>
+            
+            <td><a href="{% url 'delete_avenues' avenues.avenues_id %}" class="fa fa-trash"></a>
+                            
+            {% comment %} {% if avenues.avenues_id %} {% endcomment %}
+           <a href="{% url 'update_avenues' avenues.avenues_id %}" class="btn btn-icon btn-text-secondary waves-effect waves-light rounded-pill"><i class='ti ti-edit ti-md'></i></a></td>
+            {% comment %} {% else %}
+            <span>Invalid ID</span>
+        {% endif %} {% endcomment %}
+
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="3">No data available</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
